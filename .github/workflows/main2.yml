@@ -1,0 +1,13 @@
+name: test2
+
+on:
+  workflow_run:
+    workflows: test
+    types:
+      - completed
+
+jobs:
+  test-job:
+    runs-on: APP_1
+    steps:
+      - run: echo "It works!"
