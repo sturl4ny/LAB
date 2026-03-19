@@ -9,6 +9,12 @@ jobs:
       - run: echo "It works!"
   test-job2:
     runs-on: APP_1
-    needs: test-job
+    steps:
+      - run: echo "It really works!"
+  test-job3:
+    runs-on: APP_1
+    needs:
+      - test-job
+      - test-job2
     steps:
       - run: echo "It really works!"
