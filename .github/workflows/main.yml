@@ -1,1 +1,9 @@
+name: test
 
+on: push
+
+jobs:
+  test-job:
+    runs-on: App1
+    steps:
+      - run: echo "It works!"
