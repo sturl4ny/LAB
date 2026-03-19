@@ -4,6 +4,6 @@ on: push
 
 jobs:
   test-job:
-    runs-on: App1
+    runs-on: APP_1
     steps:
       - run: echo "It works!"
