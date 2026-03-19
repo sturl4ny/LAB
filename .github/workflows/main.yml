@@ -18,3 +18,10 @@ jobs:
       - test-job2
     steps:
       - run: echo "It really works!"
+  test-job4:
+    runs-on: APP_1
+    needs:
+      - test-job
+      - test-job2
+    steps:
+      - run: echo "It really works!"
