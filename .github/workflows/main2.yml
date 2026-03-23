@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Sync to terminal server 3
+      - name: Sync to terminal server 3a
         uses: ./.github/actions/Repo_sync
 
   sync-files-ts4:
