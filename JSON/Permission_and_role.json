@@ -1,0 +1,68 @@
+{
+    "Name": "TEST_ROLE-TEST",
+    "description": "This role will be used for TESTING",
+    "vcenter": [
+        "test_vCenter.eu"
+    ],
+    "vendor": "",
+    "reference_url": "",
+    "assignments": [
+        {
+            "object": "TEST_OBJECT_1",
+            "user-or-group": [
+                "test.domain.eu\\TEST_TU_1",
+                "test.domain.eu\\TEST_TU_2"
+            ]
+        },
+        {
+            "object": "TEST_OBJECT_2",
+            "user-or-group": [
+                "test.domain.eu\\TEST_TU_3"
+            ]
+        },
+        {
+            "object": "TEST_OBJECT_3",
+            "user-or-group": [
+                "test.domain.eu\\TEST_TU_4"
+            ]
+        },
+        {
+            "object": "TEST_OBJECT_4",
+            "user-or-group": [
+                "test.domain.eu\\TEST_TU_5"
+            ]
+        },
+        {
+            "object": "TEST_OBJECT_5",
+            "user-or-group": [
+                "test.domain.eu\\TEST_TU_6",
+                "test.domain.eu\\TEST_TU_7"
+            ]
+        }
+    ],
+    "PrivilegeList": [
+        "System.Anonymous",
+        "System.View",
+        "System.Read",
+        "Global.CancelTask",
+        "Datastore.Browse",
+        "Datastore.FileManagement",
+        "Host.Config.SystemManagement",
+        "VirtualMachine.Interact.PowerOn",
+        "VirtualMachine.Interact.PowerOff",
+        "VirtualMachine.Interact.Suspend",
+        "VirtualMachine.Interact.Reset",
+        "VirtualMachine.Interact.AnswerQuestion",
+        "VirtualMachine.Interact.ConsoleInteract",
+        "VirtualMachine.Interact.DeviceConnection",
+        "VirtualMachine.Interact.SetCDMedia",
+        "VirtualMachine.Interact.SetFloppyMedia",
+        "VirtualMachine.Interact.ToolsInstall",
+        "VirtualMachine.Config.UpgradeVirtualHardware",
+        "VirtualMachine.State.CreateSnapshot",
+        "VirtualMachine.State.RevertToSnapshot",
+        "VirtualMachine.State.RemoveSnapshot",
+        "VirtualMachine.State.RenameSnapshot",
+        "InventoryService.Tagging.ObjectAttachable"
+    ]
+}
