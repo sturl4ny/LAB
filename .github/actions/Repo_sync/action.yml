@@ -1,0 +1,9 @@
+name: Sync repo to Servers
+description: Sync files to terminal servers
+
+runs:
+  using: "composite"
+  steps:
+    - name: Sync .json files from IPMImages to D:\VMWARE_IAC
+      run: echo "It works!"
+      shell: bash

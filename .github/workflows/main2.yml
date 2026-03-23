@@ -1,22 +1,40 @@
-name: test2
+name: Import roles
 
-on: push
+on:
+  push:
+    branches:
+      - main
+    paths-ignore: '.github/**'
 
 jobs:
-  test-job:
+  sync-files-ts1:
     runs-on: APP_1
     steps:
-      - run: echo "It really works!"
+      - uses: actions/checkout@v4
 
-  test-job2:
+      - name: Sync to terminal server 1
+        uses: ./.github/actions/Repo_sync
+
+  sync-files-ts2:
     runs-on: APP_1
     steps:
-      - run: echo "It really works!"
-  
-  test-job4:
+      - uses: actions/checkout@v4
+
+      - name: Sync to terminal server 2
+        uses: ./.github/actions/Repo_sync
+
+  sync-files-ts3:
     runs-on: APP_1
-    needs:
-      - test-job
-      - test-job2
     steps:
-      - run: echo "It really works!"
+      - uses: actions/checkout@v4
+
+      - name: Sync to terminal server 3
+        uses: ./.github/actions/Repo_sync
+
+  sync-files-ts4:
+    runs-on: APP_1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync to terminal server 4
+        uses: ./.github/actions/Repo_sync
