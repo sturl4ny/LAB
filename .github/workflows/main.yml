@@ -9,7 +9,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Echo
+      - name: Echo1
         run: echo "It works!"
 
   test-job2:
