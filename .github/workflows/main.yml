@@ -6,11 +6,17 @@ jobs:
   test-job:
     runs-on: APP_1
     steps:
-      - run: echo "It works!"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Echo
+        run: echo "It works!"
+
   test-job2:
     runs-on: APP_1
     steps:
       - run: echo "It really works!"
+      
   test-job3:
     runs-on: APP_1
     needs:
