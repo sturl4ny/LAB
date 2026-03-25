@@ -2,14 +2,19 @@ name: Import roles
 
 on:
   pull_request:
+    branches: [ main ]
 
 jobs:
   Check_Duplicates:
+    name: Check_Duplicates
     runs-on: APP_1
+    
     steps:
-      - uses: actions/checkout@v4
-        name: Check_user_duplicates
-      - run: |
+      - name: Checkout_repo
+        uses: actions/checkout@v4
+
+      - name: Check_user_duplicates
+        run: |
 
           USER_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object, User: .assignments."user-or-group"[]} ] | group_by(.Object, .User) | .[] | select(length>1) |  .[] + { User_duplicates: "True"}' /srv/actions-runner/_work/LAB/LAB/JSON/*.json)
           
