@@ -11,10 +11,10 @@ jobs:
     steps:
       - name: Checkout_repo
         uses: actions/checkout@v4
-
-      - name: Get changed files
+      
+      - name: Check_object_duplicates
         run: |
-          
+
           CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '\.json$' || true)
           FINAL_FILES=()
 
@@ -26,11 +26,8 @@ jobs:
                   FINAL_FILES+=("$GITHUB_WORKSPACE/$CLEAN_PATH")
                   echo ${FINAL_FILES[@]}
               fi
-          done < <(echo "$CHANGED_FILES" | sed 's/\.json /.json\n/g')
-      
-      - name: Check_object_duplicates
-        run: |
-
+          done
+          
           OBJECT_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object} ] | group_by(.Object, .FileName) | .[] | select(length>1) | .[] + { Object_duplicate: "True"}'  "${FINAL_FILES[@]}")
           
           if [ -n "$OBJECT_DUPLICATES" ]; then
