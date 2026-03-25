@@ -1,5 +1,4 @@
-name: Import roles
-
+name: Precheck
 on:
   pull_request:
     branches: [ main ]
