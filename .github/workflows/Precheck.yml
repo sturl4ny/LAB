@@ -12,43 +12,54 @@ jobs:
       - name: Checkout_repo
         uses: actions/checkout@v4
       
-      - name: Check_object_duplicates
+      - name: Run All Duplicate Checks
         run: |
-
+          # 1. Identify PR changed files for the Object Check
           CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '\.json$' || true)
+          
           FINAL_FILES=()
-
           while IFS= read -r line; do
-              if [[ -n "$line" ]]; then
-          
-                  CLEAN_PATH=$(echo "$line" | xargs)
-                  echo $CLEAN_PATH
-                  FINAL_FILES+=("$GITHUB_WORKSPACE/$CLEAN_PATH")
-                  echo ${FINAL_FILES[@]}
-              fi
+              [[ -n "$line" ]] && FINAL_FILES+=("$GITHUB_WORKSPACE/$(echo "$line" | xargs)")
           done <<< "$CHANGED_FILES"
-          
-          OBJECT_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object} ] | group_by(.Object, .FileName) | .[] | select(length>1) | .[] + { Object_duplicate: "True"}'  "${FINAL_FILES[@]}")
-          
-          if [ -n "$OBJECT_DUPLICATES" ]; then
-            echo "❌ Duplicates discovered:"
-            echo "$OBJECT_DUPLICATES"
-            exit 1
-          else
-            echo "✅ No duplicates found."
-            exit 0
-          fi
-          
-      - name: Check_user_duplicates
-        run: |
 
-          USER_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object, User: .assignments."user-or-group"[]} ] | group_by(.Object, .User) | .[] | select(length>1) |  .[] + { User_duplicate: "True"}' /srv/actions-runner/_work/LAB/LAB/JSON/*.json)
+          HAS_ERRORS=0
+
+          # --- CHECK 1: OBJECT DUPLICATES (Only in changed files) ---
+          if [[ ${#FINAL_FILES[@]} -gt 0 ]]; then
+            echo "🔍 Checking Object Duplicates in changed files..."
+            OBJECT_DUPS=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object} ] | group_by(.Object, .FileName) | .[] | select(length>1) | .[] + { Object_duplicate: "True"}' "${FINAL_FILES[@]}")
+            
+            if [ -n "$OBJECT_DUPS" ]; then
+              echo "❌ Object Duplicates discovered in PR:"
+              echo "$OBJECT_DUPS"
+              HAS_ERRORS=1
+            else
+              echo "✅ No Object duplicates in changed files."
+            fi
+          fi
+
+          echo ""
           
-          if [ -n "$USER_DUPLICATES" ]; then
-            echo "❌ Duplicates discovered:"
-            echo "$USER_DUPLICATES"
-            exit 1
+          # --- CHECK 2: USER DUPLICATES (Global - All files in repo) ---
+          echo "🔍 Checking User Duplicates across ALL repository files..."
+          
+          # We use a wildcard to grab everything in the JSON folder
+          # Use $GITHUB_WORKSPACE/JSON/*.json to be safe and portable
+          
+          ALL_JSON_FILES=($GITHUB_WORKSPACE/JSON/*.json)
+          
+          USER_DUPS=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object, User: .assignments."user-or-group"[]} ] | group_by(.Object, .User) | .[] | select(length>1) | .[] + { User_duplicate: "True"}' "${ALL_JSON_FILES[@]}")
+          
+          if [ -n "$USER_DUPS" ]; then
+            echo "❌ Global User Duplicates discovered:"
+            echo "$USER_DUPS"
+            HAS_ERRORS=1
           else
-            echo "✅ No duplicates found."
-            exit 0
+            echo "✅ No User duplicates found in the entire repository."
+          fi
+
+          # 3. Final Exit - Fail the PR if either check failed
+          if [ "$HAS_ERRORS" -eq 1 ]; then
+            echo "⚠️ Validation failed. Please review the duplicates listed above."
+            exit 1
           fi
