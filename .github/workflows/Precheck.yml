@@ -1,5 +1,4 @@
-name: Import roles
-
+name: Precheck
 on:
   pull_request:
     branches: [ main ]
@@ -12,6 +11,9 @@ jobs:
     steps:
       - name: Checkout_repo
         uses: actions/checkout@v4
+
+      - name: Hello Debug
+        run: echo "The runner is alive!"
 
       - name: Check_user_duplicates
         run: |
