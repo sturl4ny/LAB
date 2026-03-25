@@ -16,7 +16,6 @@ jobs:
         run: |
           
           CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '\.json$' || true)
-          $GITHUB_WORKSPACE= ${{ github.workspace }}
           FINAL_FILES=()
 
           while IFS= read -r line; do
