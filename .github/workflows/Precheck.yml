@@ -1,0 +1,25 @@
+name: Import roles
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Check_Duplicates:
+    runs-on: APP_1
+    steps:
+      - uses: actions/checkout@v4
+        name: Check_user_duplicates
+      - run: |
+
+          USER_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object, User: .assignments."user-or-group"[]} ] | group_by(.Object, .User) | .[] | select(length>1) |  .[] + { User_duplicates: "True"}' *.json)
+          
+          if [ -n "$RESULT" ]; then
+            echo "❌ Duplicates discovered:"
+            echo "$RESULT"
+            exit 1
+          else
+            echo "✅ No duplicates found."
+            exit 0
+          fi
