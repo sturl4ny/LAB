@@ -16,14 +16,33 @@ jobs:
         run: |
           
           CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '\.json$' || true)
-          CHANGED_FILES=$( sed -e 's/.json/.json"/g' -e 's/JSON/"JSON/g' <<< $CHANGED_FILES)
           $GITHUB_WORKSPACE= ${{ github.workspace }}
-          RAW_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
-          echo $CHANGED_FILES
-          echo $RAW_FILES
-          echo $GITHUB_WORKSPACE
-          
+          FINAL_FILES=()
 
+          while IFS= read -r line; do
+              if [[ -n "$line" ]]; then
+          
+                  CLEAN_PATH=$(echo "$line" | xargs)
+                  echo $CLEAN_PATH
+                  FINAL_FILES+=("$GITHUB_WORKSPACE/$CLEAN_PATH")
+                  echo ${FINAL_FILES[@]}
+              fi
+          done < <(echo "$CHANGED_FILES" | sed 's/\.json /.json\n/g')
+      
+      - name: Check_object_duplicates
+        run: |
+
+          OBJECT_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object} ] | group_by(.Object, .FileName) | .[] | select(length>1) | .[] + { Object_duplicate: "True"}'  "${FINAL_FILES[@]}")
+          
+          if [ -n "$OBJECT_DUPLICATES" ]; then
+            echo "❌ Duplicates discovered:"
+            echo "$OBJECT_DUPLICATES"
+            exit 1
+          else
+            echo "✅ No duplicates found."
+            exit 0
+          fi
+          
       - name: Check_user_duplicates
         run: |
 
