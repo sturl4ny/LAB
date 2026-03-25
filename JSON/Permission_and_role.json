@@ -50,6 +50,12 @@
                 "test.domain.eu\\TEST_TU_6",
                 "test.domain.eu\\TEST_TU_7"
             ]
+        },
+        {
+            "object": "TEST_OBJECT_5",
+            "user-or-group": [
+                "test.domain.eu\\TEST_TU_10"
+            ]
         }
     ],
     "PrivilegeList": [
