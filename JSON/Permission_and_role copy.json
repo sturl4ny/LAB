@@ -14,6 +14,12 @@
       ]
     },
     {
+      "object": "TEST_OBJECT_1",
+      "user-or-group": [
+        "test.domain.eu\\TEST_TU_3"
+      ]
+    },
+    {
       "object": "TEST_OBJECT_2",
       "user-or-group": [
         "test.domain.eu\\TEST_TU_1"
