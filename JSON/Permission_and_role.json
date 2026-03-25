@@ -39,6 +39,12 @@
             ]
         },
         {
+            "object": "TEST_OBJECT_6",
+            "user-or-group": [
+                "test.domain.eu\\TEST_TU_8"
+            ]
+        },
+        {
             "object": "TEST_OBJECT_5",
             "user-or-group": [
                 "test.domain.eu\\TEST_TU_6",
