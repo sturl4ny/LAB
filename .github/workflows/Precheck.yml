@@ -1,9 +1,7 @@
 name: Import roles
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
 
 jobs:
   Check_Duplicates:
@@ -13,7 +11,7 @@ jobs:
         name: Check_user_duplicates
       - run: |
 
-          USER_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object, User: .assignments."user-or-group"[]} ] | group_by(.Object, .User) | .[] | select(length>1) |  .[] + { User_duplicates: "True"}' *.json)
+          USER_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object, User: .assignments."user-or-group"[]} ] | group_by(.Object, .User) | .[] | select(length>1) |  .[] + { User_duplicates: "True"}' /srv/actions-runner/_work/LAB/LAB/JSON/*.json)
           
           if [ -n "$RESULT" ]; then
             echo "❌ Duplicates discovered:"
