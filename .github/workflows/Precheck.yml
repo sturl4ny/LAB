@@ -26,7 +26,7 @@ jobs:
                   FINAL_FILES+=("$GITHUB_WORKSPACE/$CLEAN_PATH")
                   echo ${FINAL_FILES[@]}
               fi
-          done
+          done <<< "$CHANGED_FILES"
           
           OBJECT_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object} ] | group_by(.Object, .FileName) | .[] | select(length>1) | .[] + { Object_duplicate: "True"}'  "${FINAL_FILES[@]}")
           
