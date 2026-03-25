@@ -12,13 +12,16 @@ jobs:
       - name: Checkout_repo
         uses: actions/checkout@v4
 
-      - name: Hello Debug
-        run: echo "The runner is alive!"
+      - name: Get changed files
+        run: |
+          
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '\.json$' || true)
+          echo $CHANGED_FILES
 
       - name: Check_user_duplicates
         run: |
 
-          USER_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object, User: .assignments."user-or-group"[]} ] | group_by(.Object, .User) | .[] | select(length>1) |  .[] + { User_duplicates: "True"}' /srv/actions-runner/_work/LAB/LAB/JSON/*.json)
+          USER_DUPLICATES=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object, User: .assignments."user-or-group"[]} ] | group_by(.Object, .User) | .[] | select(length>1) |  .[] + { User_duplicate: "True"}' /srv/actions-runner/_work/LAB/LAB/JSON/*.json)
           
           if [ -n "$USER_DUPLICATES" ]; then
             echo "❌ Duplicates discovered:"
