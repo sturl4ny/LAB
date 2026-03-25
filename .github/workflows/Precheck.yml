@@ -13,6 +13,9 @@ jobs:
       - name: Checkout_repo
         uses: actions/checkout@v4
 
+      - name: Hello Debug
+        run: echo "The runner is alive!"
+
       - name: Check_user_duplicates
         run: |
 
