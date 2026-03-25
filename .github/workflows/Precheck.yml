@@ -16,7 +16,13 @@ jobs:
         run: |
           
           CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '\.json$' || true)
+          CHANGED_FILES=$( sed -e 's/.json/.json"/g' -e 's/JSON/"JSON/g' <<< $CHANGED_FILES)
+          $GITHUB_WORKSPACE= ${{ github.workspace }
+          RAW_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
           echo $CHANGED_FILES
+          echo $RAW_FILES
+          echo $GITHUB_WORKSPACE
+          
 
       - name: Check_user_duplicates
         run: |
