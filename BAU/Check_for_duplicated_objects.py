@@ -1,19 +1,22 @@
+import ldif
 import json
-import pandas as pd
 
-file = r"D:\_Lab\Git\LAB-1\JSON\Permission_and_role copy.json"
+class MyParser(ldif.LDIFParser):
+    def __init__(self, input_file):
+        super().__init__(input_file)
+        self.results = []
 
-with open(file, 'r') as f:
-    json = json.load(f)
+    def handle(self, dn, entry):
+        # This function runs for every record found
+        clean_entry = {'dn': dn}
+        for key, values in entry.items():
+            # Decode bytes to strings
+            decoded = [v.decode('utf-8', errors='ignore') if isinstance(v, bytes) else v for v in values]
+            clean_entry[key] = decoded[0] if len(decoded) == 1 else decoded
+        self.results.append(clean_entry)
 
-df = pd.DataFrame(json['assignments'])
-users = df['user-or-group']
-split = df.explode('user-or-group')
-duplicated = df.duplicated('object')
-
-#df = pd.json_normalize(json)
-# 4. Display the result
-print(df)
-#print(users)
-#print(split)
-print(duplicated)
+def convert_ldif_to_json(input_filename):
+    with open(r"C:\TMP\users.ldif", 'rb') as f:
+        parser = MyParser(f)
+        parser.parse() # This triggers the 'handle' function above
+        return parser.results
