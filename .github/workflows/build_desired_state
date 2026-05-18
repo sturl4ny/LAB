@@ -1,0 +1,33 @@
+name: Build desired state
+
+on: push
+
+jobs:
+  insert_JSON_staging_data:
+    runs-on: APP_1
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Echo1
+        run: echo "It works!"
+
+  insert_vcenter_objects:
+    runs-on: APP_1
+    needs:
+      - insert_JSON_staging_data
+    steps:
+      - run: echo "It really works!"
+      
+  compare_staging_data:
+    runs-on: APP_1
+    needs:
+      - insert_vcenter_objects
+    steps:
+      - run: echo "It really works!"
+  update_desired_state:
+    runs-on: APP_1
+    needs:
+      - compare_staging_data
+    steps:
+      - run: echo "It really works!"
