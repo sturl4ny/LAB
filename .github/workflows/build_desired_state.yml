@@ -30,3 +30,9 @@ jobs:
       - compare_staging_data
     steps:
       - run: echo "It really works!"
+  import_desired_state:
+    runs-on: APP_1
+    needs:
+      - update_desired_state
+    steps:
+      - run: echo "It really works!"
