@@ -9,13 +9,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Echo1
-        run: echo "It works!"
+      - name: I should run 1st
+        run: echo "I ran 1st!"
 
   insert_vcenter_objects:
     runs-on: APP_1
     steps:
-      - run: echo "It really works!"
+      - name: I should run 2nd
+        run: echo "I ran 2nd"
       
   compare_staging_data:
     runs-on: APP_1
@@ -23,16 +24,19 @@ jobs:
       - insert_JSON_staging_data
       - insert_vcenter_objects
     steps:
-      - run: echo "It really works!"
+      - name: I should run 3rd
+        run: echo "I run 3rd"
   update_desired_state:
     runs-on: APP_1
     needs:
       - compare_staging_data
     steps:
-      - run: echo "It really works!"
+      - name: I should run 4th
+        run: echo "I run 4th"
   import_desired_state:
     runs-on: APP_1
     needs:
       - update_desired_state
     steps:
-      - run: echo "It really works!"
+      - name: I should run 5th
+        run: echo "I run 5th"
