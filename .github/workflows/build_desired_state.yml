@@ -20,7 +20,7 @@ jobs:
   compare_staging_data:
     runs-on: APP_1
     needs:
-      - insert_vcenter_objects
+      - insert_JSON_staging_data
       - insert_vcenter_objects
     steps:
       - run: echo "It really works!"
