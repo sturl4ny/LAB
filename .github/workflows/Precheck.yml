@@ -80,4 +80,4 @@ jobs:
             exit 1
           fi
       - name: Save PR Number to file
-        run: echo "${{ github.event.number }}" > /tmp/pr_num_${{ github.event.pull_request.head.sha }}.txt
+        run: echo "${{ github.event.number }}" > /tmp/pr_number.txt
