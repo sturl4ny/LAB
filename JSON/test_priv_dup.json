@@ -24,6 +24,7 @@
         "Global.CancelTask",
         "Global.Settings",
         "Global.GlobalTag",
+        "Global.GlobalTag",
         "Folder.Create",
         "Folder.Delete",
         "Folder.Rename",
