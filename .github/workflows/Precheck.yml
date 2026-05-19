@@ -63,7 +63,7 @@ jobs:
           echo "--- CHECK 3: PRIVILEGE DUPLICATES (Only in changed files) ---"
           if [[ ${#FINAL_FILES[@]} -gt 0 ]]; then
             echo "Checking Privilege Duplicates in changed files..."
-            PRIVS_DUPS=$(jq -n '[inputs | {Role: .Name, FileName: input_filename, Privilege: .PrivilegeList[]}] | group_by(.FileName, .Role, .Privilege) | .[] | select(length > 1) | {FileName: .[0].FileName, Role: .[0].Role, DuplicatePrivilege: .[0].Privilege, Count: length}' "${CHANGED_FILES[@]}")
+            PRIVS_DUPS=$(jq -n '[inputs | {Role: .Name, FileName: input_filename, Privilege: .PrivilegeList[]}] | group_by(.FileName, .Role, .Privilege) | .[] | select(length > 1) | {FileName: .[0].FileName, Role: .[0].Role, DuplicatePrivilege: .[0].Privilege, Count: length}' "${FINAL_FILES[@]}")
             
             if [ -n "$PRIVS_DUPS" ]; then
               echo "Privilege Duplicates discovered in PR:"
