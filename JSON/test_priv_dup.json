@@ -72,6 +72,7 @@
         "VirtualMachine.Config.Resource",
         "VirtualMachine.Config.UpgradeVirtualHardware",
         "VirtualMachine.Config.ResetGuestInfo",
+        "VirtualMachine.Config.ResetGuestInfo",
         "VirtualMachine.Config.AdvancedConfig",
         "VirtualMachine.Config.DiskLease",
         "VirtualMachine.Config.SwapPlacement",
