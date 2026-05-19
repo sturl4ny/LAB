@@ -26,40 +26,51 @@ jobs:
 
           # --- CHECK 1: OBJECT DUPLICATES (Only in changed files) ---
           if [[ ${#FINAL_FILES[@]} -gt 0 ]]; then
-            echo "🔍 Checking Object Duplicates in changed files..."
+            echo "Checking Object Duplicates in changed files..."
             OBJECT_DUPS=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object} ] | group_by(.Object, .FileName) | .[] | select(length>1) | .[] + { Object_duplicate: "True"}' "${FINAL_FILES[@]}")
             
             if [ -n "$OBJECT_DUPS" ]; then
-              echo "❌ Object Duplicates discovered in PR:"
+              echo "Object Duplicates discovered in PR:"
               echo "$OBJECT_DUPS"
               HAS_ERRORS=1
             else
-              echo "✅ No Object duplicates in changed files."
+              echo "No Object duplicates in changed files."
             fi
           fi
 
           echo ""
           
           # --- CHECK 2: USER DUPLICATES (Global - All files in repo) ---
-          echo "🔍 Checking User Duplicates across ALL repository files..."
-          
-          # We use a wildcard to grab everything in the JSON folder
-          # Use $GITHUB_WORKSPACE/JSON/*.json to be safe and portable
+          echo "Checking User Duplicates across ALL repository files..."
           
           ALL_JSON_FILES=($GITHUB_WORKSPACE/JSON/*.json)
           
           USER_DUPS=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object, User: .assignments."user-or-group"[]} ] | group_by(.Object, .User) | .[] | select(length>1) | .[] + { User_duplicate: "True"}' "${ALL_JSON_FILES[@]}")
           
           if [ -n "$USER_DUPS" ]; then
-            echo "❌ Global User Duplicates discovered:"
+            echo "Global User Duplicates discovered:"
             echo "$USER_DUPS"
             HAS_ERRORS=1
           else
-            echo "✅ No User duplicates found in the entire repository."
+            echo "No User duplicates found in the entire repository."
+          fi
+          
+          # --- CHECK 3: PRIVILEGE DUPLICATES (Only in changed files) ---
+          if [[ ${#FINAL_FILES[@]} -gt 0 ]]; then
+            echo "Checking Privilege Duplicates in changed files..."
+            PRIVS_DUPS=$(jq -n '[inputs | {Role: .Name, FileName: input_filename, Privilege: .PrivilegeList[]}] | group_by(.FileName, .Role, .Privilege) | .[] | select(length > 1) | {FileName: .[0].FileName, Role: .[0].Role, DuplicatePrivilege: .[0].Privilege, Count: length}' "${CHANGED_FILES[@]}")
+            
+            if [ -n "$PRIVS_DUPS" ]; then
+              echo "Privilege Duplicates discovered in PR:"
+              echo "$PRIVS_DUPS"
+              HAS_ERRORS=1
+            else
+              echo "No Privilege duplicates in changed files."
+            fi
           fi
 
           # 3. Final Exit - Fail the PR if either check failed
           if [ "$HAS_ERRORS" -eq 1 ]; then
-            echo "⚠️ Validation failed. Please review the duplicates listed above."
+            echo "Validation failed. Please review the duplicates listed above."
             exit 1
           fi
