@@ -47,8 +47,11 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
           APPROVER_NAME: ${{ github.actor }}
-          COMMITER_NAME: ${{ github.actor }}
-        run: echo "$GITHUB_CONTEXT"
+          COMMITER_NAME: ${{ github.event.commits.author.name }}
+        run: |
+          echo "$GITHUB_CONTEXT"
+          echo "Approver name: $APPROVER_NAME" 
+          echo "Commiter name: $COMMITER_NAME" 
       - name: Read PR Number Locally
         run: |
           FILE_PATH="/tmp/pr_number.txt"
@@ -56,8 +59,7 @@ jobs:
             PR_NUMBER=$(cat "$FILE_PATH")
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
             echo "Found PR Number: $PR_NUMBER"
-            echo "Approver name: $APPROVER_NAME" 
-            echo "Commiter name: $COMMITER_NAME" 
+
             # Optional: clean up the file now that you're done with it
             rm "$FILE_PATH"
           else
