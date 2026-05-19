@@ -13,7 +13,10 @@ jobs:
     steps:
       - name: Checkout_repo
         uses: actions/checkout@v4
-      
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Run All Duplicate Checks
         run: |
           # 1. Identify PR changed files for the Object Check
