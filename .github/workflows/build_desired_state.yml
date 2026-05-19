@@ -47,7 +47,7 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
           APPROVER_NAME: ${{ github.actor }}
-          COMMITER_NAME: ${{ github.event.commits.author.name }}
+          COMMITER_NAME: ${{ github.event.commits[0].author.name }}
         run: |
           echo "$GITHUB_CONTEXT"
           echo "Approver name: $APPROVER_NAME" 
