@@ -49,21 +49,17 @@ jobs:
           APPROVER_NAME: ${{ github.actor }}
           COMMITER_NAME: ${{ github.actor }}
         run: echo "$GITHUB_CONTEXT"
-      - name: Restore PR Number from Cache
-        uses: actions/cache/restore@v4
-        with:
-          path: pr_num.txt
-          key: pr-number-${{ github.sha }}
-
-      # Read it directly into your environment
-      - name: Read the Variable
+      - name: Read PR Number Locally
         run: |
-          if [ -f pr_num.txt ]; then
-            PR_NUMBER=$(cat pr_num.txt)
+          FILE_PATH="/tmp/pr_num_${{ github.sha }}.txt"
+          if [ -f "$FILE_PATH" ]; then
+            PR_NUMBER=$(cat "$FILE_PATH")
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-            echo "Successfully loaded PR Number: $PR_NUMBER"
+            echo "Found PR Number: $PR_NUMBER"
             echo "Approver name: $env:APPROVER_NAME" 
             echo "Commiter name: $env:COMMITER_NAME" 
+            # Optional: clean up the file now that you're done with it
+            rm "$FILE_PATH"
           else
-            echo "No cached PR number found for this commit."
+            echo "No local file found for this commit SHA."
           fi
