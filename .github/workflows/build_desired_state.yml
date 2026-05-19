@@ -43,5 +43,7 @@ jobs:
     needs:
       - update_desired_state
     steps:
-      - name: I should run 5th
-        run: echo "I run 5th"
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
