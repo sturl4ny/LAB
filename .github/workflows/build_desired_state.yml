@@ -46,4 +46,24 @@ jobs:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
+          APPROVER_NAME: ${{ github.actor }}
+          COMMITER_NAME: ${{ github.actor }}
         run: echo "$GITHUB_CONTEXT"
+      - name: Restore PR Number from Cache
+        uses: actions/cache/restore@v4
+        with:
+          path: pr_num.txt
+          key: pr-number-${{ github.sha }}
+
+      # Read it directly into your environment
+      - name: Read the Variable
+        run: |
+          if [ -f pr_num.txt ]; then
+            PR_NUMBER=$(cat pr_num.txt)
+            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+            echo "Successfully loaded PR Number: $PR_NUMBER"
+            echo "Approver name: $env:APPROVER_NAME" 
+            echo "Commiter name: $env:COMMITER_NAME" 
+          else
+            echo "No cached PR number found for this commit."
+          fi
