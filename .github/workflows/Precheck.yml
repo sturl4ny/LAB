@@ -1,8 +1,10 @@
 name: Precheck
 on:
   pull_request:
-    branches: [ main ]
-
+    branches:
+      - main
+    paths-ignore:
+      - '.github/**'
 jobs:
   Check_Duplicates:
     name: Check_Duplicates
