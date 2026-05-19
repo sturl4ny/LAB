@@ -24,7 +24,7 @@ jobs:
 
           HAS_ERRORS=0
 
-          # --- CHECK 1: OBJECT DUPLICATES (Only in changed files) ---
+          echo "--- CHECK 1: OBJECT DUPLICATES (Only in changed files) ---"
           if [[ ${#FINAL_FILES[@]} -gt 0 ]]; then
             echo "Checking Object Duplicates in changed files..."
             OBJECT_DUPS=$(jq -n '[ inputs as $file | $file | {Role: .Name, FileName: input_filename, assignments: .assignments[]} | {Role, FileName, Object: .assignments.object} ] | group_by(.Object, .FileName) | .[] | select(length>1) | .[] + { Object_duplicate: "True"}' "${FINAL_FILES[@]}")
@@ -40,7 +40,7 @@ jobs:
 
           echo ""
           
-          # --- CHECK 2: USER DUPLICATES (Global - All files in repo) ---
+          echo "--- CHECK 2: USER DUPLICATES (Global - All files in repo) ---"
           echo "Checking User Duplicates across ALL repository files..."
           
           ALL_JSON_FILES=($GITHUB_WORKSPACE/JSON/*.json)
@@ -55,7 +55,7 @@ jobs:
             echo "No User duplicates found in the entire repository."
           fi
           
-          # --- CHECK 3: PRIVILEGE DUPLICATES (Only in changed files) ---
+          echo "--- CHECK 3: PRIVILEGE DUPLICATES (Only in changed files) ---"
           if [[ ${#FINAL_FILES[@]} -gt 0 ]]; then
             echo "Checking Privilege Duplicates in changed files..."
             PRIVS_DUPS=$(jq -n '[inputs | {Role: .Name, FileName: input_filename, Privilege: .PrivilegeList[]}] | group_by(.FileName, .Role, .Privilege) | .[] | select(length > 1) | {FileName: .[0].FileName, Role: .[0].Role, DuplicatePrivilege: .[0].Privilege, Count: length}' "${CHANGED_FILES[@]}")
