@@ -51,7 +51,7 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
       - name: Read PR Number Locally
         run: |
-          FILE_PATH="/tmp/pr_num_${{ github.sha }}.txt"
+          FILE_PATH="/tmp/pr_number.txt"
           if [ -f "$FILE_PATH" ]; then
             PR_NUMBER=$(cat "$FILE_PATH")
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
