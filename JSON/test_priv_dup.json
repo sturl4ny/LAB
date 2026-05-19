@@ -44,6 +44,7 @@
         "VirtualMachine.Inventory.Register",
         "VirtualMachine.Inventory.Delete",
         "VirtualMachine.Inventory.Unregister",
+        "VirtualMachine.Inventory.Unregister",
         "VirtualMachine.Inventory.Move",
         "VirtualMachine.Interact.PowerOn",
         "VirtualMachine.Interact.PowerOff",
