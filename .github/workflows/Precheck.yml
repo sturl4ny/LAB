@@ -81,10 +81,3 @@ jobs:
           fi
       - name: Save PR Number to file
         run: echo "${{ github.event.number }}" > /tmp/pr_num_${{ github.event.pull_request.head.sha }}.txt
-
-      # Cache the file using the commit SHA as the key
-      - name: Cache PR Number
-        uses: actions/cache/save@v4
-        with:
-          path: pr_num.txt
-          key: pr-number-${{ github.event.pull_request.head.sha }}
