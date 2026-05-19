@@ -16,7 +16,7 @@ jobs:
       
       - name: Run All Duplicate Checks
         run: |
-          # 1. Identify PR changed files for the Object Checka
+          # 1. Identify PR changed files for the Object Checkaa
           CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '\.json$' || true)
           
           FINAL_FILES=()
