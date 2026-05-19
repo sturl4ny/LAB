@@ -56,8 +56,8 @@ jobs:
             PR_NUMBER=$(cat "$FILE_PATH")
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
             echo "Found PR Number: $PR_NUMBER"
-            echo "Approver name: $env:APPROVER_NAME" 
-            echo "Commiter name: $env:COMMITER_NAME" 
+            echo "Approver name: $APPROVER_NAME" 
+            echo "Commiter name: $COMMITER_NAME" 
             # Optional: clean up the file now that you're done with it
             rm "$FILE_PATH"
           else
