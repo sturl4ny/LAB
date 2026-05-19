@@ -79,11 +79,12 @@ jobs:
             echo "Validation failed. Please review the duplicates listed above."
             exit 1
           fi
-      - name: Save PR Number
-        run: echo "${{ github.event.number }}" > pr_number.txt
-  
-      - name: Upload PR Number Artifact
-        uses: actions/upload-artifact@v4
+      - name: Save PR Number to file
+        run: echo "${{ github.event.number }}" > pr_num.txt
+
+      # Cache the file using the commit SHA as the key
+      - name: Cache PR Number
+        uses: actions/cache/save@v4
         with:
-          name: pr-number-${{ github.event.pull_request.head.sha }}
-          path: pr_number.txt
+          path: pr_num.txt
+          key: pr-number-${{ github.event.pull_request.head.sha }}
