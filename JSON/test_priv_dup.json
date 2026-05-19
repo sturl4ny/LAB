@@ -20,7 +20,7 @@
         "System.Read",
         "Global.ManageCustomFields",
         "Global.SetCustomField",
-        "Global.LogEvent",
+        "Global.LogEven1t",
         "Global.CancelTask",
         "Global.Settings",
         "Global.GlobalTag",
