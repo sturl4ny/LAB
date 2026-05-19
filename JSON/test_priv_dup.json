@@ -105,6 +105,7 @@
         "Resource.RenamePool",
         "Resource.EditPool",
         "Resource.MovePool",
+        "Resource.MovePool1",
         "Resource.DeletePool",
         "Resource.HotMigrate",
         "Resource.ColdMigrate",
