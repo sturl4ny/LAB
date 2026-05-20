@@ -45,15 +45,15 @@ jobs:
     needs:
       - update_desired_state
     steps:
-      - name: Download Artifact from Workflow One
-        uses: actions/download-artifact@v4
+      - name: Download Artifact from PR Workflow
+        uses: dawidd6/action-download-artifact@v8
         with:
+          github_token: ${{ github.token }}
+          workflow: Precheck.yml
           name: PR_number_artifact
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ github.token }}
       - name: Use the data
         run: |
-          cat /tmp/pr_number.txt
+          cat pr_number.txt
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
