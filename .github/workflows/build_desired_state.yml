@@ -40,6 +40,8 @@ jobs:
         run: echo "I run 4th"
   import_desired_state:
     runs-on: APP_1
+    permissions:
+      actions: read
     needs:
       - update_desired_state
     steps:
