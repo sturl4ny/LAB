@@ -13,10 +13,7 @@ jobs:
     steps:
       - name: Checkout_repo
         uses: actions/checkout@v4
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+
       - name: Run All Duplicate Checks
         run: |
           # 1. Identify PR changed files for the Object Check
@@ -79,5 +76,13 @@ jobs:
             echo "Validation failed. Please review the duplicates listed above."
             exit 1
           fi
+
       - name: Save PR Number to file
         run: echo "${{ github.event.number }}" > /tmp/pr_number.txt
+
+      - name: Upload PR number Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PR_number_artifact
+          path: /tmp/pr_number.txt
+          retention-days: 1
