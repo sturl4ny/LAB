@@ -43,6 +43,15 @@ jobs:
     needs:
       - update_desired_state
     steps:
+      - name: Download Artifact from Workflow One
+        uses: actions/download-artifact@v4
+        with:
+          name: PR_number_artifact
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Use the data
+        run: |
+          cat /tmp/pr_number.txt
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -51,7 +60,8 @@ jobs:
         run: |
           echo "$GITHUB_CONTEXT"
           echo "Approver name: $APPROVER_NAME" 
-          echo "Commiter name: $COMMITER_NAME" 
+          echo "Commiter name: $COMMITER_NAME"
+          echo ""
       - name: Read PR Number Locally
         run: |
           FILE_PATH="/tmp/pr_number.txt"
