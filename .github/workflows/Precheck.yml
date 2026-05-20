@@ -86,3 +86,8 @@ jobs:
           name: PR_number_artifact
           path: /tmp/pr_number.txt
           retention-days: 1
+      - name: Dump GitHub Context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
