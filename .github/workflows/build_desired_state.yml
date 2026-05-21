@@ -1,9 +1,11 @@
 name: Build desired state
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types:
+     - closed
     paths-ignore:
       - '.github/**'
 
@@ -58,7 +60,7 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
           APPROVER_NAME: ${{ github.actor }}
-          COMMITER_NAME: ${{ github.event.commits[0].author.name }}
+          COMMITER_NAME: ${{ github.event.pull_request.user.login }}
         run: |
           echo "$GITHUB_CONTEXT"
           echo "Approver name: $APPROVER_NAME" 
