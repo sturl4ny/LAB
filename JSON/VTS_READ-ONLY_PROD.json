@@ -1,0 +1,42 @@
+{
+    "Name": "VTS_READ-ONLY_PROD",
+    "description": "This role will be used for readonly visibility on vCenters",
+    "vcenter": [
+        "ALL"
+    ],
+    "assignments": [
+        { 
+            "object": "Datacenters",
+            "user-or-group": [
+                "HD00.UNICREDITGROUP.EU\\TUUAY",
+                "HD00.UNICREDITGROUP.EU\\GGPVMW_VROPS_ACCESS_G3"
+            ]
+        },
+        { 
+            "object": "MSY_WINDOWS",
+            "user-or-group": [
+                "HD00.UNICREDITGROUP.EU\\GGPMSYUGIADM"
+            ]
+        },
+        { 
+            "object": "QN3_WINDOWS",
+            "user-or-group": [
+                "HD00.UNICREDITGROUP.EU\\GGPVMWXNCUcdsView"
+            ]
+        },
+        { 
+            "object": "UCT_WINDOWS",
+            "user-or-group": [
+                "HD00.UNICREDITGROUP.EU\\GGPVMWXNCUcdsView"
+            ]
+        }
+    ],
+    "reference_url": "",
+    "vendor": "",
+    "PrivilegeList": [
+        "System.Anonymous",
+        "System.View",
+        "System.Read",
+        "InventoryService.Tagging.ObjectAttachable"
+    ]
+}
